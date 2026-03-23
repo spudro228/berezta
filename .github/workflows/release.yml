@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DBERESTA_BUILD_TESTS=OFF -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+          cmake --build build --config Release
+      - name: Package
+        run: |
+          cd build
+          tar czf beresta-${GITHUB_REF_NAME}-macos-universal.tar.gz beresta
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-binary
+          path: build/beresta-*-macos-universal.tar.gz
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DBERESTA_BUILD_TESTS=OFF
+          cmake --build build --config Release
+      - name: Package
+        run: |
+          cd build
+          tar czf beresta-${GITHUB_REF_NAME}-linux-x86_64.tar.gz beresta
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-binary
+          path: build/beresta-*-linux-x86_64.tar.gz
+
+  release:
+    needs: [build-macos, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/macos-binary/*
+            artifacts/linux-binary/*
+          generate_release_notes: true
