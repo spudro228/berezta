@@ -2,9 +2,16 @@
 
 namespace beresta {
 
-void History::record(Edit edit) {
-    undo_stack_.push_back(std::move(edit));
+void History::record(Edit edit, bool mergeable) {
+    if (mergeable && last_mergeable_ && !undo_stack_.empty()) {
+        // Coalesce: keep original before-state, update after-state.
+        undo_stack_.back().buffer_after = std::move(edit.buffer_after);
+        undo_stack_.back().selection_after = edit.selection_after;
+    } else {
+        undo_stack_.push_back(std::move(edit));
+    }
     redo_stack_.clear();
+    last_mergeable_ = mergeable;
 }
 
 bool History::undo(Edit& out) {

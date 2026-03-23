@@ -108,6 +108,7 @@ std::optional<std::string> App::active_status_message() const {
 }
 
 void App::render() {
+    term::begin_sync();
     auto [w, h] = term::get_terminal_size();
     size_t editor_h = h > kUiReservedRows ? h - kUiReservedRows : 1;
 
@@ -148,7 +149,7 @@ void App::render() {
         render_help_screen(w, h);
         render_status_bar(doc_, h, active_status_message());
         term::hide_cursor();
-        term::flush();
+        term::end_sync();
         return;
     }
 
@@ -202,36 +203,48 @@ void App::render() {
         position_terminal_cursor(doc_, left_padding);
     }
 
-    term::flush();
+    term::end_sync();
 }
 
 void App::dispatch(const CommandEvent& event) {
     switch (event.command) {
-        // --- Navigation ---
-        case Command::MoveLeft:      doc_.move_left(); break;
-        case Command::MoveRight:     doc_.move_right(); break;
-        case Command::MoveUp:        doc_.move_up(); break;
-        case Command::MoveDown:      doc_.move_down(); break;
-        case Command::MoveWordLeft:  doc_.move_word_left(); break;
-        case Command::MoveWordRight: doc_.move_word_right(); break;
-        case Command::MoveLineStart: doc_.move_line_start(); break;
-        case Command::MoveLineEnd:   doc_.move_line_end(); break;
-        case Command::MoveDocStart:  doc_.move_doc_start(); break;
-        case Command::MoveDocEnd:    doc_.move_doc_end(); break;
-        case Command::PageUp:        doc_.page_up(); break;
-        case Command::PageDown:      doc_.page_down(); break;
+        // --- Navigation (breaks undo merge) ---
+        case Command::MoveLeft:      doc_.history.break_merge(); doc_.move_left(); break;
+        case Command::MoveRight:     doc_.history.break_merge(); doc_.move_right(); break;
+        case Command::MoveUp:        doc_.history.break_merge(); doc_.move_up(); break;
+        case Command::MoveDown:      doc_.history.break_merge(); doc_.move_down(); break;
+        case Command::MoveWordLeft:  doc_.history.break_merge(); doc_.move_word_left(); break;
+        case Command::MoveWordRight: doc_.history.break_merge(); doc_.move_word_right(); break;
+        case Command::MoveLineStart: doc_.history.break_merge(); doc_.move_line_start(); break;
+        case Command::MoveLineEnd:   doc_.history.break_merge(); doc_.move_line_end(); break;
+        case Command::MoveDocStart:  doc_.history.break_merge(); doc_.move_doc_start(); break;
+        case Command::MoveDocEnd:    doc_.history.break_merge(); doc_.move_doc_end(); break;
+        case Command::PageUp:        doc_.history.break_merge(); doc_.page_up(); break;
+        case Command::PageDown:      doc_.history.break_merge(); doc_.page_down(); break;
 
-        // --- Selection ---
-        case Command::SelectLeft:  doc_.select_left(); break;
-        case Command::SelectRight: doc_.select_right(); break;
-        case Command::SelectUp:    doc_.select_up(); break;
-        case Command::SelectDown:  doc_.select_down(); break;
-        case Command::SelectAll:   doc_.select_all(); break;
+        // --- Selection (breaks undo merge) ---
+        case Command::SelectLeft:  doc_.history.break_merge(); doc_.select_left(); break;
+        case Command::SelectRight: doc_.history.break_merge(); doc_.select_right(); break;
+        case Command::SelectUp:    doc_.history.break_merge(); doc_.select_up(); break;
+        case Command::SelectDown:      doc_.history.break_merge(); doc_.select_down(); break;
+        case Command::SelectWordLeft:  doc_.history.break_merge(); doc_.select_word_left(); break;
+        case Command::SelectWordRight: doc_.history.break_merge(); doc_.select_word_right(); break;
+        case Command::SelectAll:       doc_.history.break_merge(); doc_.select_all(); break;
 
         // --- Editing ---
         case Command::Copy: handle_copy(); break;
         case Command::Cut:  handle_cut(); break;
         case Command::Paste: handle_paste(); break;
+        case Command::DeleteLine: {
+            size_t edit_from = doc_.buffer.pos_to_char(
+                doc_.buffer.char_to_pos(doc_.selection.primary().from()).first, 0);
+            size_t old_size = doc_.buffer.total_chars();
+            doc_.delete_line();
+            json_tokens_dirty_ = true;
+            long delta = static_cast<long>(doc_.buffer.total_chars()) - static_cast<long>(old_size);
+            adjust_pinned_ranges(edit_from, edit_from + static_cast<size_t>(-delta), delta);
+            break;
+        }
 
         // --- Text editing ---
         case Command::InsertChar:

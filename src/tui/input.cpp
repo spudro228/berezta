@@ -29,7 +29,7 @@ int parse_int(const std::string& s, size_t& pos) {
 /// Parse a CSI modifier+key for modified arrow sequences.
 ///
 /// Modifier codes (char digit):
-///   '2' = Shift,  '3' = Alt,  '5' = Ctrl
+///   '2' = Shift,  '3' = Alt,  '4' = Shift+Alt,  '5' = Ctrl
 std::optional<CommandEvent> parse_modified_arrow(char mod, int key) {
     switch (mod) {
         case '3': // Alt
@@ -54,6 +54,18 @@ std::optional<CommandEvent> parse_modified_arrow(char mod, int key) {
                 case 'B': return CommandEvent{Command::SelectDown};
                 case 'C': return CommandEvent{Command::SelectRight};
                 case 'D': return CommandEvent{Command::SelectLeft};
+            }
+            break;
+        case '4': // Shift+Alt
+            switch (key) {
+                case 'C': return CommandEvent{Command::SelectWordRight};
+                case 'D': return CommandEvent{Command::SelectWordLeft};
+            }
+            break;
+        case '6': // Shift+Ctrl
+            switch (key) {
+                case 'C': return CommandEvent{Command::SelectWordRight};
+                case 'D': return CommandEvent{Command::SelectWordLeft};
             }
             break;
     }
@@ -207,8 +219,9 @@ std::optional<CommandEvent> parse_csi_u(const std::string& params) {
 
     // Decode modifier bits (Kitty uses 1-indexed: value - 1 = bitfield).
     int mod_bits = (modifiers > 0) ? modifiers - 1 : 0;
-    bool alt  = mod_bits & 2;
-    bool ctrl = mod_bits & 4;
+    bool shift = mod_bits & 1;
+    bool alt   = mod_bits & 2;
+    bool ctrl  = mod_bits & 4;
 
     // Fallback: if base_layout_key wasn't reported and a modifier is active,
     // try mapping Cyrillic (ЙЦУКЕН) to Latin (QWERTY).
@@ -223,10 +236,11 @@ std::optional<CommandEvent> parse_csi_u(const std::string& params) {
             case 'a': return CommandEvent{Command::SelectAll};
             case 'b': return CommandEvent{Command::PinSelection};
             case 'c': return CommandEvent{Command::Copy};
-            case 'd': return CommandEvent{Command::SelectNextOccurrence};
+            case 'd': return CommandEvent{Command::DeleteLine};
             case 'f': return CommandEvent{Command::OpenSearch};
             case 'h': return CommandEvent{Command::OpenReplace};
             case 'l': return CommandEvent{Command::ShowPinnedList};
+            case 'w': return CommandEvent{Command::SelectNextOccurrence};
             case 'p': return CommandEvent{Command::OpenCommandPalette};
             case 'q': return CommandEvent{Command::Quit};
             case 's': return CommandEvent{Command::Save};
@@ -234,6 +248,14 @@ std::optional<CommandEvent> parse_csi_u(const std::string& params) {
             case 'x': return CommandEvent{Command::Cut};
             case 'y': return CommandEvent{Command::Redo};
             case 'z': return CommandEvent{Command::Undo};
+        }
+    }
+
+    // --- Shift+Alt+key (select by word) ---
+    if (shift && alt && !ctrl) {
+        switch (effective_key) {
+            case 'b': return CommandEvent{Command::SelectWordLeft};
+            case 'f': return CommandEvent{Command::SelectWordRight};
         }
     }
 
@@ -379,10 +401,11 @@ std::optional<CommandEvent> read_key_event(InputMode mode) {
             case 1:  return CommandEvent{Command::SelectAll};              // Ctrl-A
             case 2:  return CommandEvent{Command::PinSelection};           // Ctrl-B
             case 3:  return CommandEvent{Command::Copy};                   // Ctrl-C
-            case 4:  return CommandEvent{Command::SelectNextOccurrence};   // Ctrl-D
+            case 4:  return CommandEvent{Command::DeleteLine};             // Ctrl-D
             case 6:  return CommandEvent{Command::OpenSearch};             // Ctrl-F
             case 8:  return CommandEvent{Command::OpenReplace};            // Ctrl-H
             case 12: return CommandEvent{Command::ShowPinnedList};         // Ctrl-L
+            case 23: return CommandEvent{Command::SelectNextOccurrence};   // Ctrl-W
             case 16: return CommandEvent{Command::OpenCommandPalette};     // Ctrl-P
             case 17: return CommandEvent{Command::Quit};                   // Ctrl-Q
             case 19: return CommandEvent{Command::Save};                   // Ctrl-S

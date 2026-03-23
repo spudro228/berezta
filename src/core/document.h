@@ -58,6 +58,8 @@ public:
     void select_right();
     void select_up();
     void select_down();
+    void select_word_left();
+    void select_word_right();
     void select_all();
 
     // --- Text editing (works with all cursors) ---
@@ -66,6 +68,7 @@ public:
     void insert_newline();
     void delete_backward();
     void delete_forward();
+    void delete_line();
 
     // --- Multi-cursor ---
     void add_cursor_above();
@@ -87,10 +90,11 @@ public:
 
 private:
     /// Apply text insertion at all cursor positions. Handles selections.
-    void apply_insert(const std::string& text);
+    void apply_insert(const std::string& text, bool mergeable = false);
 
     /// Save buffer+selection state before an edit, apply the edit, record history.
-    void record_edit(const std::string& buf_before, const Selection& sel_before);
+    void record_edit(const std::string& buf_before, const Selection& sel_before,
+                     bool mergeable = false);
 
     /// Get the word under the cursor at the given position.
     std::string word_at(size_t pos) const;

@@ -28,7 +28,12 @@ public:
     History() = default;
 
     /// Record an edit that was just applied.
-    void record(Edit edit);
+    /// If `mergeable` is true and the previous edit was also mergeable,
+    /// the two edits are coalesced (e.g. consecutive character typing).
+    void record(Edit edit, bool mergeable = false);
+
+    /// Break the merge chain so the next record() starts a new entry.
+    void break_merge() { last_mergeable_ = false; }
 
     /// Pop the most recent edit for undoing.
     bool undo(Edit& out);
@@ -44,6 +49,7 @@ public:
 private:
     std::vector<Edit> undo_stack_;
     std::vector<Edit> redo_stack_;
+    bool last_mergeable_ = false;
 };
 
 } // namespace beresta

@@ -36,6 +36,13 @@ std::pair<size_t, size_t> get_terminal_size();
 /// Flush stdout.
 void flush();
 
+/// Begin a synchronized output batch (reduces flicker).
+/// Terminal buffers all output until end_sync().
+void begin_sync();
+
+/// End a synchronized output batch and display the result.
+void end_sync();
+
 /// Try to enable Kitty keyboard protocol for layout-independent hotkeys.
 /// Returns true if the terminal supports it and it was enabled.
 bool try_enable_kitty_keyboard();

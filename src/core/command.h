@@ -35,6 +35,8 @@ enum class Command {
     SelectRight,
     SelectUp,
     SelectDown,
+    SelectWordLeft,
+    SelectWordRight,
     SelectAll,
 
     // --- Multi-cursor ---
@@ -49,6 +51,7 @@ enum class Command {
     Cut,
     Copy,
     Paste,
+    DeleteLine,
 
     // --- Search ---
     OpenSearch,

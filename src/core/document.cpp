@@ -259,6 +259,41 @@ void Document::select_down() {
     ensure_cursor_visible();
 }
 
+void Document::select_word_left() {
+    const Buffer& buf = buffer;
+    selection = selection.transform([&buf](Range r) {
+        std::string text = buf.to_string();
+        size_t pos = r.head;
+        if (pos == 0) return Range(r.anchor, 0);
+        while (pos > 0 && !is_word_char(text[pos - 1])) {
+            pos = ustr::prev_codepoint(text, pos);
+        }
+        while (pos > 0 && is_word_char(text[pos - 1])) {
+            pos = ustr::prev_codepoint(text, pos);
+        }
+        return Range(r.anchor, pos);
+    });
+    ensure_cursor_visible();
+}
+
+void Document::select_word_right() {
+    const Buffer& buf = buffer;
+    selection = selection.transform([&buf](Range r) {
+        std::string text = buf.to_string();
+        size_t len = text.size();
+        size_t pos = r.head;
+        if (pos >= len) return Range(r.anchor, len);
+        while (pos < len && is_word_char(text[pos])) {
+            pos = ustr::next_codepoint(text, pos);
+        }
+        while (pos < len && !is_word_char(text[pos])) {
+            pos = ustr::next_codepoint(text, pos);
+        }
+        return Range(r.anchor, pos);
+    });
+    ensure_cursor_visible();
+}
+
 void Document::select_all() {
     selection = Selection::single(0, buffer.total_chars());
     ensure_cursor_visible();
@@ -267,7 +302,7 @@ void Document::select_all() {
 // --- Text editing (multi-cursor) ---
 
 void Document::insert_char(char ch) {
-    apply_insert(std::string(1, ch));
+    apply_insert(std::string(1, ch), /*mergeable=*/true);
 }
 
 void Document::insert_text(const std::string& text) {
@@ -358,16 +393,47 @@ void Document::delete_forward() {
     ensure_cursor_visible();
 }
 
-void Document::record_edit(const std::string& buf_before, const Selection& sel_before) {
+void Document::delete_line() {
+    std::string buf_before = buffer.to_string();
+    Selection sel_before = selection;
+
+    // Determine the line range covered by the primary selection.
+    Range primary = selection.primary();
+    auto [line_from, _1] = buffer.char_to_pos(primary.from());
+    auto [line_to, _2] = buffer.char_to_pos(primary.to());
+
+    // Compute byte range: start of first line to start of line after last.
+    size_t del_from = buffer.pos_to_char(line_from, 0);
+    size_t del_to;
+    if (line_to + 1 < buffer.line_count()) {
+        del_to = buffer.pos_to_char(line_to + 1, 0);
+    } else {
+        // Last line: delete to end, and also the preceding newline if any.
+        del_to = buffer.total_chars();
+        if (line_from > 0 && del_from > 0) {
+            del_from--; // include newline before this line
+        }
+    }
+
+    if (del_from >= del_to && del_to == 0) return; // empty buffer
+
+    buffer.remove(del_from, del_to);
+    selection = Selection::point(std::min(del_from, buffer.total_chars()));
+    record_edit(buf_before, sel_before);
+    ensure_cursor_visible();
+}
+
+void Document::record_edit(const std::string& buf_before, const Selection& sel_before,
+                           bool mergeable) {
     history.record(Edit{
         buf_before,
         buffer.to_string(),
         sel_before,
         selection,
-    });
+    }, mergeable);
 }
 
-void Document::apply_insert(const std::string& text) {
+void Document::apply_insert(const std::string& text, bool mergeable) {
     std::string buf_before = buffer.to_string();
     Selection sel_before = selection;
     const auto& ranges = selection.ranges();
@@ -396,7 +462,7 @@ void Document::apply_insert(const std::string& text) {
     }
     selection = Selection::from_ranges(std::move(new_ranges), sel_before.primary_idx());
 
-    record_edit(buf_before, sel_before);
+    record_edit(buf_before, sel_before, mergeable);
     ensure_cursor_visible();
 }
 

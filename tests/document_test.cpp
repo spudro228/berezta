@@ -247,10 +247,21 @@ TEST(DocumentTest, MultipleUndos) {
     doc.insert_char('c');
     EXPECT_EQ(doc.buffer.to_string(), "abc");
 
+    // Consecutive insert_char calls are coalesced into one undo entry.
+    doc.undo();
+    EXPECT_EQ(doc.buffer.to_string(), "");
+}
+
+TEST(DocumentTest, MultipleUndosWithBreak) {
+    auto doc = make_doc("");
+    doc.insert_char('a');
+    doc.insert_char('b');
+    doc.history.break_merge(); // simulate cursor movement
+    doc.insert_char('c');
+    EXPECT_EQ(doc.buffer.to_string(), "abc");
+
     doc.undo();
     EXPECT_EQ(doc.buffer.to_string(), "ab");
-    doc.undo();
-    EXPECT_EQ(doc.buffer.to_string(), "a");
     doc.undo();
     EXPECT_EQ(doc.buffer.to_string(), "");
 }
@@ -451,8 +462,7 @@ TEST(DocumentTest, MultiCursorTypeAndUndo) {
     doc.insert_char('2');
     EXPECT_EQ(doc.buffer.to_string(), "12aa\n12bb");
 
-    doc.undo(); // undo '2'
-    EXPECT_EQ(doc.buffer.to_string(), "1aa\n1bb");
-    doc.undo(); // undo '1'
+    // Consecutive multi-cursor inserts are coalesced.
+    doc.undo();
     EXPECT_EQ(doc.buffer.to_string(), "aa\nbb");
 }

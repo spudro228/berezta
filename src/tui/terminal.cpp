@@ -32,6 +32,11 @@ void enable_raw_mode() {
         throw std::runtime_error("Failed to set terminal to raw mode");
     }
     raw_mode_enabled = true;
+
+    // Use fully-buffered stdout with a large buffer so all writes
+    // accumulate until flush() is called, eliminating flicker.
+    static char stdout_buf[1 << 16]; // 64 KB
+    std::setvbuf(stdout, stdout_buf, _IOFBF, sizeof(stdout_buf));
 }
 
 void disable_raw_mode() {
@@ -75,6 +80,18 @@ std::pair<size_t, size_t> get_terminal_size() {
 }
 
 void flush() {
+    std::fflush(stdout);
+}
+
+void begin_sync() {
+    // DEC mode 2026: synchronized output. Terminal holds display
+    // updates until end_sync(). Supported by most modern terminals;
+    // silently ignored by those that don't support it.
+    std::fputs("\x1b[?2026h", stdout);
+}
+
+void end_sync() {
+    std::fputs("\x1b[?2026l", stdout);
     std::fflush(stdout);
 }
 
