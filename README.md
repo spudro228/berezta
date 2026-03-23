@@ -25,22 +25,65 @@ cmake --build build
 
 Зависимости (utfcpp, Google Test) скачиваются автоматически.
 
-## Установка из релиза (macOS)
+## Установка
+
+### Из релиза (macOS)
 
 ```bash
-tar xzf beresta-v0.1.0-macos-universal.tar.gz
-# Снять карантинный флаг Gatekeeper:
+# Скачать и распаковать
+tar xzf beresta-v0.2.0-macos-universal.tar.gz
+
+# Снять карантинный флаг Gatekeeper
 xattr -cr beresta
-./beresta myfile.txt
+
+# Установить в систему
+sudo cp beresta /usr/local/bin/
 ```
 
 > macOS блокирует неподписанные бинарники из интернета. Команда `xattr -cr` снимает карантинный атрибут. Альтернатива: Системные настройки → Конфиденциальность и безопасность → «Всё равно открыть».
 
-## Запуск (из сборки)
+### Из релиза (Linux)
 
 ```bash
-./build/beresta              # новый файл
-./build/beresta myfile.txt   # открыть файл
+tar xzf beresta-v0.2.0-linux-x86_64.tar.gz
+sudo cp beresta /usr/local/bin/
+```
+
+### Из исходников
+
+```bash
+git clone https://github.com/spudro228/berezta.git
+cd berezta
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+sudo cp build/beresta /usr/local/bin/
+```
+
+### Без sudo (в домашнюю директорию)
+
+Если нет прав на `/usr/local/bin`, можно установить в `~/.local/bin`:
+
+```bash
+mkdir -p ~/.local/bin
+cp beresta ~/.local/bin/
+```
+
+Добавьте в `~/.bashrc` (или `~/.zshrc` для macOS):
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Затем перезагрузите конфигурацию:
+
+```bash
+source ~/.bashrc   # или source ~/.zshrc
+```
+
+После этого `beresta` доступна из любой директории:
+
+```bash
+beresta myfile.txt
 ```
 
 ## Тесты
