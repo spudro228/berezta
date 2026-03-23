@@ -6,9 +6,19 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <filesystem>
 #include <unistd.h>
 
 namespace beresta {
+
+namespace {
+bool is_git_message_file(const std::string& path) {
+    std::string name = std::filesystem::path(path).filename().string();
+    return name == "COMMIT_EDITMSG" || name == "MERGE_MSG" ||
+           name == "TAG_EDITMSG" || name == "SQUASH_MSG" ||
+           name == "git-rebase-todo" || name == "addp-hunk-edit.diff";
+}
+} // anonymous namespace
 
 App::App()
     : doc_([]() {
@@ -25,6 +35,7 @@ App::App(const std::string& file_path)
     }()) {
     doc_ = Document::open(file_path, doc_.viewport.width, doc_.viewport.height);
     is_json_ = is_json_file(file_path);
+    is_git_message_ = is_git_message_file(file_path);
 }
 
 int App::run() {
@@ -40,6 +51,25 @@ int App::run() {
         // Use read_key_event which handles escape sequences properly.
         auto event = read_key_event(mode_);
         if (!event.has_value()) continue;
+
+        if (mode_ == InputMode::QuitConfirm) {
+            // y = save & exit(0), n = exit(1), Esc = cancel
+            if (event->command == Command::InsertChar) {
+                char ch = event->ch;
+                if (ch == 'y' || ch == 'Y') {
+                    handle_save();
+                    exit_code_ = 0;
+                    running_ = false;
+                } else if (ch == 'n' || ch == 'N') {
+                    exit_code_ = 1;
+                    running_ = false;
+                }
+            } else if (event->command == Command::Cancel) {
+                mode_ = InputMode::Normal;
+                set_status_message("");
+            }
+            continue;
+        }
 
         if (mode_ == InputMode::Help) {
             // Any key closes help.
@@ -92,7 +122,7 @@ int App::run() {
     term::show_cursor();
     term::leave_alternate_screen();
     term::disable_raw_mode();
-    return 0;
+    return exit_code_;
 }
 
 void App::set_status_message(const std::string& msg) {
@@ -135,7 +165,8 @@ void App::render() {
         update_json_tokens();
     }
     render_document(doc_, editor_h, search_matches, json_tokens, left_padding,
-                    pinned_items_.empty() ? nullptr : &pinned_items_);
+                    pinned_items_.empty() ? nullptr : &pinned_items_,
+                    is_git_message_);
 
     // Pinned selections panel (right column).
     if (show_panel) {
@@ -147,7 +178,7 @@ void App::render() {
     if (mode_ == InputMode::Help) {
         // Draw popup overlay on top of the document.
         render_help_screen(w, h);
-        render_status_bar(doc_, h, active_status_message());
+        render_status_bar(doc_, h, active_status_message(), is_git_message_);
         term::hide_cursor();
         term::end_sync();
         return;
@@ -199,7 +230,7 @@ void App::render() {
         }
         term::show_cursor();
     } else {
-        render_status_bar(doc_, h, active_status_message());
+        render_status_bar(doc_, h, active_status_message(), is_git_message_);
         position_terminal_cursor(doc_, left_padding);
     }
 
@@ -401,8 +432,13 @@ void App::handle_save() {
 }
 
 void App::handle_quit() {
-    // TODO: confirm unsaved changes with double Ctrl-Q.
-    running_ = false;
+    if (doc_.buffer.is_modified()) {
+        mode_ = InputMode::QuitConfirm;
+        set_status_message(u8"Есть несохранённые изменения. Сохранить? (y/n/Esc)");
+    } else {
+        exit_code_ = 0;
+        running_ = false;
+    }
 }
 
 void App::handle_cancel() {

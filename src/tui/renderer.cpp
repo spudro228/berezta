@@ -51,7 +51,8 @@ void render_document(const Document& doc, size_t editor_height,
                      const std::vector<Match>& search_matches,
                      const std::vector<JsonToken>& json_tokens,
                      size_t left_padding,
-                     const std::vector<PinnedItem>* pinned_items) {
+                     const std::vector<PinnedItem>* pinned_items,
+                     bool git_mode) {
     auto cursor_pos = doc.selection.primary().cursor();
     auto [cursor_line, _] = doc.buffer.char_to_pos(cursor_pos);
     const auto& selections = doc.selection.ranges();
@@ -78,6 +79,18 @@ void render_document(const Document& doc, size_t editor_height,
             }
             std::fprintf(stdout, "%*zu ", static_cast<int>(kLineNumberWidth - 1), doc_line + 1);
             term::color::fg_default();
+
+            // --- Git commit message highlighting ---
+            bool git_comment = false;
+            bool git_subject_overflow = false;
+            if (git_mode) {
+                const std::string& gl = doc.buffer.line(doc_line);
+                if (!gl.empty() && gl[0] == '#') {
+                    git_comment = true;
+                } else if (doc_line == 0 && ustr::display_width(gl) > 50) {
+                    git_subject_overflow = true;
+                }
+            }
 
             // --- Line content (UTF-8 aware) ---
             const std::string& line_text = doc.buffer.line(doc_line);
@@ -145,6 +158,10 @@ void render_document(const Document& doc, size_t editor_height,
                 if (has_json) {
                     JsonTokenKind kind = json_token_at(char_offset, json_tokens);
                     apply_json_fg(kind);
+                } else if (git_comment) {
+                    term::color::fg_grey();
+                } else if (git_subject_overflow && display_col >= 50) {
+                    term::color::fg_red();
                 }
 
                 if (cp == '\t') {
@@ -162,7 +179,7 @@ void render_document(const Document& doc, size_t editor_height,
                 if (in_selection || in_pinned || in_match) {
                     term::color::bg_default();
                 }
-                if (has_json) {
+                if (has_json || git_comment || git_subject_overflow) {
                     term::color::fg_default();
                 }
             }

@@ -46,11 +46,13 @@ public:
 private:
     Document doc_;
     bool running_ = true;
+    int exit_code_ = 0;
     InputMode mode_ = InputMode::Normal;
     std::optional<std::string> status_message_;
     std::chrono::steady_clock::time_point status_message_time_;
     bool json_tokens_dirty_ = true;
     bool center_mode_ = false;
+    bool is_git_message_ = false;
 
     std::unique_ptr<Prompt> search_prompt_;
     std::unique_ptr<Prompt> replace_prompt_;

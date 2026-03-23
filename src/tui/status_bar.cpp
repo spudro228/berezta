@@ -12,7 +12,8 @@ static const std::string kHelpHint = " F1 Help  F2 Center ";
 void render_status_bar(
     const Document& doc,
     size_t terminal_height,
-    const std::optional<std::string>& message)
+    const std::optional<std::string>& message,
+    bool git_mode)
 {
     auto [term_width, _] = term::get_terminal_size();
 
@@ -26,13 +27,18 @@ void render_status_bar(
     size_t display_col = doc.buffer.byte_to_display_col(line, col_bytes);
 
     std::string encoding = doc.buffer.codec().name();
+    std::string git_info;
+    if (git_mode && doc.buffer.line_count() > 0) {
+        size_t subject_len = doc.buffer.line_display_width(0);
+        git_info = " subj:" + std::to_string(subject_len) + "/50";
+    }
     std::string right;
     if (doc.selection.len() > 1) {
-        right = " " + encoding + " | "
+        right = git_info + " " + encoding + " | "
               + std::to_string(line + 1) + ":" + std::to_string(display_col + 1)
               + " (" + std::to_string(doc.selection.len()) + " cursors) ";
     } else {
-        right = " " + encoding + " | "
+        right = git_info + " " + encoding + " | "
               + std::to_string(line + 1) + ":" + std::to_string(display_col + 1) + " ";
     }
 

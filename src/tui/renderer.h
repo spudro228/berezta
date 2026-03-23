@@ -21,7 +21,8 @@ void render_document(const Document& doc, size_t editor_height,
                      const std::vector<Match>& search_matches = {},
                      const std::vector<JsonToken>& json_tokens = {},
                      size_t left_padding = 0,
-                     const std::vector<PinnedItem>* pinned_items = nullptr);
+                     const std::vector<PinnedItem>* pinned_items = nullptr,
+                     bool git_mode = false);
 
 /// Position the terminal cursor at the primary cursor's screen location.
 /// `left_padding` must match the value passed to render_document.

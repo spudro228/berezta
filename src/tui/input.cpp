@@ -364,6 +364,12 @@ std::optional<CommandEvent> read_key_event(InputMode mode) {
         return evt;
     }
 
+    // QuitConfirm mode: pass y/n as InsertChar, ESC handled above.
+    if (mode == InputMode::QuitConfirm) {
+        if (c >= 32 && c < 127) return CommandEvent{Command::InsertChar, static_cast<char>(c)};
+        return std::nullopt;
+    }
+
     // PinnedList mode: arrow keys handled via ESC sequences above,
     // here handle Enter, Delete, 'a', ESC (as raw bytes).
     if (mode == InputMode::PinnedList) {

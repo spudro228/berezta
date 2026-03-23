@@ -11,6 +11,7 @@ namespace beresta {
 void render_status_bar(
     const Document& doc,
     size_t terminal_height,
-    const std::optional<std::string>& message);
+    const std::optional<std::string>& message,
+    bool git_mode = false);
 
 } // namespace beresta

@@ -14,6 +14,7 @@ enum class InputMode {
     CommandPalette,
     Help,
     PinnedList,
+    QuitConfirm,
 };
 
 /// Read a single key event from stdin (blocking until available or timeout).
