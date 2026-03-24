@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 struct PinnedItem;  // forward declaration (defined in app.h)
 
@@ -34,4 +34,4 @@ void render_pinned_panel(const std::vector<PinnedItem>& items,
                          size_t cursor, bool focused,
                          size_t start_col, size_t panel_w, size_t editor_h);
 
-} // namespace beresta
+} // namespace berezta

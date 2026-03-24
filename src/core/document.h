@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 /// Visible area of the document within the terminal.
 struct Viewport {
@@ -102,4 +102,4 @@ private:
     static bool is_word_char(char c);
 };
 
-} // namespace beresta
+} // namespace berezta

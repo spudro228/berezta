@@ -1,6 +1,6 @@
 #include "core/history.h"
 
-namespace beresta {
+namespace berezta {
 
 void History::record(Edit edit, bool mergeable) {
     if (mergeable && last_mergeable_ && !undo_stack_.empty()) {
@@ -39,4 +39,4 @@ void History::clear() {
     redo_stack_.clear();
 }
 
-} // namespace beresta
+} // namespace berezta

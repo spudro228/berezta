@@ -9,7 +9,7 @@
 
 #include <utf8.h>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 
@@ -311,4 +311,4 @@ void render_pinned_panel(const std::vector<PinnedItem>& items,
     }
 }
 
-} // namespace beresta
+} // namespace berezta

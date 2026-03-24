@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(beresta VERSION 0.1.0 LANGUAGES C CXX)
+project(berezta VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,7 +33,7 @@ add_library(wcwidth STATIC src/vendor/wcwidth.c)
 target_include_directories(wcwidth PUBLIC ${CMAKE_SOURCE_DIR}/src/vendor)
 
 # --- Core library (no platform dependencies) ---
-add_library(beresta_core
+add_library(berezta_core
     src/core/buffer.cpp
     src/core/codec.cpp
     src/core/selection.cpp
@@ -43,11 +43,11 @@ add_library(beresta_core
     src/core/json.cpp
     src/core/utf8_util.cpp
 )
-target_include_directories(beresta_core PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(beresta_core PUBLIC utf8cpp wcwidth)
+target_include_directories(berezta_core PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(berezta_core PUBLIC utf8cpp wcwidth)
 
 # --- TUI library (terminal I/O) ---
-add_library(beresta_tui
+add_library(berezta_tui
     src/tui/terminal.cpp
     src/tui/renderer.cpp
     src/tui/input.cpp
@@ -56,16 +56,16 @@ add_library(beresta_tui
     src/tui/help.cpp
     src/tui/app.cpp
 )
-target_include_directories(beresta_tui PUBLIC ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(beresta_tui PUBLIC beresta_core)
+target_include_directories(berezta_tui PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(berezta_tui PUBLIC berezta_core)
 
 # --- Main executable ---
-add_executable(beresta src/main.cpp)
-target_link_libraries(beresta PRIVATE beresta_tui)
+add_executable(berezta src/main.cpp)
+target_link_libraries(berezta PRIVATE berezta_tui)
 
 # --- Tests ---
-option(BERESTA_BUILD_TESTS "Build tests" ON)
-if(BERESTA_BUILD_TESTS)
+option(BEREZTA_BUILD_TESTS "Build tests" ON)
+if(BEREZTA_BUILD_TESTS)
     FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz
@@ -75,7 +75,7 @@ if(BERESTA_BUILD_TESTS)
 
     enable_testing()
 
-    add_executable(beresta_tests
+    add_executable(berezta_tests
         tests/buffer_test.cpp
         tests/codec_test.cpp
         tests/selection_test.cpp
@@ -85,9 +85,9 @@ if(BERESTA_BUILD_TESTS)
         tests/json_test.cpp
         tests/utf8_util_test.cpp
     )
-    target_link_libraries(beresta_tests PRIVATE beresta_core GTest::gtest_main)
-    target_include_directories(beresta_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(berezta_tests PRIVATE berezta_core GTest::gtest_main)
+    target_include_directories(berezta_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
     include(GoogleTest)
-    gtest_discover_tests(beresta_tests)
+    gtest_discover_tests(berezta_tests)
 endif()

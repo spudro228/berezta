@@ -4,7 +4,7 @@
 
 #include <optional>
 
-namespace beresta {
+namespace berezta {
 
 /// The current input mode of the editor.
 enum class InputMode {
@@ -21,4 +21,4 @@ enum class InputMode {
 /// Returns std::nullopt on timeout or unrecognized input.
 std::optional<CommandEvent> read_key_event(InputMode mode);
 
-} // namespace beresta
+} // namespace berezta

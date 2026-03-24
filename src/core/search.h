@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// A single search match: start position and length.
 struct Match {
@@ -27,4 +27,4 @@ size_t find_next(const std::string& text, const std::string& query,
 size_t find_prev(const std::string& text, const std::string& query,
                  size_t start, bool wrap = true);
 
-} // namespace beresta
+} // namespace berezta

@@ -5,7 +5,7 @@
 #include <cctype>
 #include <filesystem>
 
-namespace beresta {
+namespace berezta {
 
 Document::Document(size_t viewport_width, size_t viewport_height)
     : selection(Selection::point(0)) {
@@ -582,4 +582,4 @@ bool Document::redo() {
     return true;
 }
 
-} // namespace beresta
+} // namespace berezta

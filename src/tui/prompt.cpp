@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 
@@ -75,4 +75,4 @@ void Prompt::set_input(const std::string& text) {
     cursor_ = text.size();
 }
 
-} // namespace beresta
+} // namespace berezta

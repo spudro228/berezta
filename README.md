@@ -1,4 +1,4 @@
-# beresta
+# berezta
 
 Терминальный текстовый редактор на C++17 с поддержкой UTF-8, мультикурсора и закреплённых выделений.
 
@@ -31,13 +31,13 @@ cmake --build build
 
 ```bash
 # Скачать и распаковать
-tar xzf beresta-v0.2.0-macos-universal.tar.gz
+tar xzf berezta-v0.2.0-macos-universal.tar.gz
 
 # Снять карантинный флаг Gatekeeper
-xattr -cr beresta
+xattr -cr berezta
 
 # Установить в систему
-sudo cp beresta /usr/local/bin/
+sudo cp berezta /usr/local/bin/
 ```
 
 > macOS блокирует неподписанные бинарники из интернета. Команда `xattr -cr` снимает карантинный атрибут. Альтернатива: Системные настройки → Конфиденциальность и безопасность → «Всё равно открыть».
@@ -45,8 +45,8 @@ sudo cp beresta /usr/local/bin/
 ### Из релиза (Linux)
 
 ```bash
-tar xzf beresta-v0.2.0-linux-x86_64.tar.gz
-sudo cp beresta /usr/local/bin/
+tar xzf berezta-v0.2.0-linux-x86_64.tar.gz
+sudo cp berezta /usr/local/bin/
 ```
 
 ### Из исходников
@@ -56,7 +56,7 @@ git clone https://github.com/spudro228/berezta.git
 cd berezta
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
-sudo cp build/beresta /usr/local/bin/
+sudo cp build/berezta /usr/local/bin/
 ```
 
 ### Без sudo (в домашнюю директорию)
@@ -65,7 +65,7 @@ sudo cp build/beresta /usr/local/bin/
 
 ```bash
 mkdir -p ~/.local/bin
-cp beresta ~/.local/bin/
+cp berezta ~/.local/bin/
 ```
 
 Добавьте в `~/.bashrc` (или `~/.zshrc` для macOS):
@@ -80,24 +80,24 @@ export PATH="$HOME/.local/bin:$PATH"
 source ~/.bashrc   # или source ~/.zshrc
 ```
 
-После этого `beresta` доступна из любой директории:
+После этого `berezta` доступна из любой директории:
 
 ```bash
-beresta myfile.txt
+berezta myfile.txt
 ```
 
 ## Использование как редактор для Git
 
 ```bash
-git config --global core.editor "beresta"
+git config --global core.editor "berezta"
 ```
 
-После этого git будет открывать beresta для:
+После этого git будет открывать berezta для:
 - Редактирования commit messages (`git commit`)
 - Интерактивного rebase (`git rebase -i`)
 - Merge messages (`git merge`)
 
-Beresta автоматически определяет git-файлы и включает:
+Berezta автоматически определяет git-файлы и включает:
 - Подсветку комментариев (строки с `#`) серым
 - Предупреждение если тема коммита > 50 символов (красный текст)
 - Счётчик длины темы в статус-баре (`subj:N/50`)
@@ -112,7 +112,7 @@ cd build && ctest --output-on-failure
 Запуск конкретного набора тестов:
 
 ```bash
-cd build && ./beresta_tests --gtest_filter='BufferTest.*'
+cd build && ./berezta_tests --gtest_filter='BufferTest.*'
 ```
 
 ## Горячие клавиши

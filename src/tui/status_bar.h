@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 /// Render the status bar and optional message at the bottom of the terminal.
 void render_status_bar(
@@ -14,4 +14,4 @@ void render_status_bar(
     const std::optional<std::string>& message,
     bool git_mode = false);
 
-} // namespace beresta
+} // namespace berezta

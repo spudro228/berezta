@@ -11,14 +11,14 @@ int main(int argc, char* argv[]) {
 
     try {
         if (argc > 1) {
-            beresta::App app(argv[1]);
+            berezta::App app(argv[1]);
             return app.run();
         } else {
-            beresta::App app;
+            berezta::App app;
             return app.run();
         }
     } catch (const std::exception& e) {
-        std::cerr << "beresta: " << e.what() << std::endl;
+        std::cerr << "berezta: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 }

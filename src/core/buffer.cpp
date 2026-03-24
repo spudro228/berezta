@@ -6,7 +6,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace beresta {
+namespace berezta {
 
 Buffer::Buffer() : lines_{""}, codec_(std::make_unique<Utf8Codec>()) {}
 
@@ -262,4 +262,4 @@ void Buffer::set_text(const std::string& text) {
     }
 }
 
-} // namespace beresta
+} // namespace berezta

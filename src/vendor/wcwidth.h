@@ -1,12 +1,12 @@
 /*
  * wcwidth.h - determine the display width of a Unicode character in a terminal.
  *
- * Based on Markus Kuhn's implementation, adapted for use in beresta.
+ * Based on Markus Kuhn's implementation, adapted for use in berezta.
  * See: https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
  */
 
-#ifndef BERESTA_WCWIDTH_H
-#define BERESTA_WCWIDTH_H
+#ifndef BEREZTA_WCWIDTH_H
+#define BEREZTA_WCWIDTH_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,4 +26,4 @@ int mk_wcwidth(int ucs);
 }
 #endif
 
-#endif /* BERESTA_WCWIDTH_H */
+#endif /* BEREZTA_WCWIDTH_H */

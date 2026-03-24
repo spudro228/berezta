@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <utf8.h>
 
-namespace beresta {
+namespace berezta {
 
 // ---- Codec base ------------------------------------------------------------
 
@@ -228,4 +228,4 @@ std::vector<std::string> available_codecs() {
     return {"UTF-8", "Latin-1", "CP1251"};
 }
 
-} // namespace beresta
+} // namespace berezta

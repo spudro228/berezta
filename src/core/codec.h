@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// Abstract codec interface for encoding/decoding between file bytes and
 /// internal UTF-8 representation.
@@ -67,4 +67,4 @@ std::unique_ptr<Codec> detect_codec(const std::string& bytes);
 /// Return the list of available codec names.
 std::vector<std::string> available_codecs();
 
-} // namespace beresta
+} // namespace berezta

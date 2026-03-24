@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace beresta;
+using namespace berezta;
 
 TEST(Utf8UtilTest, CodepointCountAscii) {
     EXPECT_EQ(ustr::codepoint_count("hello"), 5);

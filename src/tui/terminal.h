@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-namespace beresta::term {
+namespace berezta::term {
 
 /// Enter raw mode (disable canonical input, echo, etc.).
 void enable_raw_mode();
@@ -82,4 +82,4 @@ void write(const std::string& s);
 void write(const char* s);
 void write(char c);
 
-} // namespace beresta::term
+} // namespace berezta::term

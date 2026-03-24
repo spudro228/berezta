@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-namespace beresta::ustr {
+namespace berezta::ustr {
 
 /// Count the number of Unicode codepoints in a UTF-8 string.
 size_t codepoint_count(const std::string& s);
@@ -34,4 +34,4 @@ std::string substr_cp(const std::string& s, size_t cp_from, size_t cp_to);
 /// Check if the string is valid UTF-8.
 bool is_valid(const std::string& s);
 
-} // namespace beresta::ustr
+} // namespace berezta::ustr

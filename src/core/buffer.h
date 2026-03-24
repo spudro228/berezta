@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// A text buffer storing lines as a vector of strings.
 ///
@@ -95,4 +95,4 @@ private:
     void set_text(const std::string& text);
 };
 
-} // namespace beresta
+} // namespace berezta

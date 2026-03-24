@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 /// State of the interactive prompt bar (search, replace, etc.).
 class Prompt {
@@ -32,4 +32,4 @@ private:
     size_t cursor_ = 0;
 };
 
-} // namespace beresta
+} // namespace berezta

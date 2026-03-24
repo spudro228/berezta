@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <fstream>
 
-using namespace beresta;
+using namespace berezta;
 
 // ---- Utf8Codec tests -------------------------------------------------------
 
@@ -305,7 +305,7 @@ TEST(CodecTest, BufferSetCodec) {
 }
 
 TEST(CodecTest, BufferSaveLoadUtf8Roundtrip) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_codec_test_utf8.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_codec_test_utf8.txt";
     std::string content = u8"Привет мир";
 
     {
@@ -323,7 +323,7 @@ TEST(CodecTest, BufferSaveLoadUtf8Roundtrip) {
 }
 
 TEST(CodecTest, BufferSaveLoadLatin1Roundtrip) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_codec_test_latin1.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_codec_test_latin1.txt";
 
     // Write Latin-1 encoded bytes directly.
     {
@@ -344,7 +344,7 @@ TEST(CodecTest, BufferSaveLoadLatin1Roundtrip) {
 }
 
 TEST(CodecTest, BufferSaveWithCodec) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_codec_test_save.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_codec_test_save.txt";
     std::string content = u8"caf\u00E9"; // "cafe" with e-acute
 
     {
@@ -367,7 +367,7 @@ TEST(CodecTest, BufferSaveWithCodec) {
 }
 
 TEST(CodecTest, BufferSaveLoadCp1251Roundtrip) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_codec_test_cp1251.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_codec_test_cp1251.txt";
 
     // Write CP1251 encoded bytes directly: "Привет" in CP1251
     {
@@ -416,7 +416,7 @@ TEST(CodecTest, BufferDisplayColToByte) {
 }
 
 TEST(CodecTest, BufferFromFileAutoDetect) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_codec_auto.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_codec_auto.txt";
 
     // Write valid UTF-8
     {

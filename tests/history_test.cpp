@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace beresta;
+using namespace berezta;
 
 TEST(HistoryTest, EmptyHistoryCannotUndo) {
     History hist;

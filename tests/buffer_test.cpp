@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <fstream>
 
-using namespace beresta;
+using namespace berezta;
 
 TEST(BufferTest, DefaultConstructorCreatesEmptyBuffer) {
     Buffer buf;
@@ -159,7 +159,7 @@ TEST(BufferTest, ToStringWithTrailingNewline) {
 }
 
 TEST(BufferTest, SaveAndLoadRoundtrip) {
-    auto path = std::filesystem::temp_directory_path() / "beresta_test_buffer.txt";
+    auto path = std::filesystem::temp_directory_path() / "berezta_test_buffer.txt";
     std::string content = "test content\nline two";
 
     {

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 std::vector<Match> find_all(const std::string& text, const std::string& query) {
     std::vector<Match> matches;
@@ -48,4 +48,4 @@ size_t find_prev(const std::string& text, const std::string& query,
     return std::string::npos;
 }
 
-} // namespace beresta
+} // namespace berezta

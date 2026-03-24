@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Beresta — терминальный текстовый редактор на C++17. Поддерживает UTF-8, мультикурсор, закреплённые выделения, поиск/замену, undo/redo, copy/paste (системный clipboard), JSON-подсветку/форматирование. Работает с кодировками UTF-8, Latin-1, CP1251 (автоопределение). Поддерживает Kitty keyboard protocol для работы горячих клавиш при любой раскладке.
+Berezta — терминальный текстовый редактор на C++17. Поддерживает UTF-8, мультикурсор, закреплённые выделения, поиск/замену, undo/redo, copy/paste (системный clipboard), JSON-подсветку/форматирование. Работает с кодировками UTF-8, Latin-1, CP1251 (автоопределение). Поддерживает Kitty keyboard protocol для работы горячих клавиш при любой раскладке.
 
 ## Build & Test
 
@@ -14,13 +14,13 @@ cmake -B build -DCMAKE_BUILD_TYPE=Debug
 cmake --build build
 
 # Запуск редактора
-./build/beresta [file]
+./build/berezta [file]
 
 # Запуск всех тестов
 cd build && ctest --output-on-failure
 
 # Запуск конкретного теста по фильтру
-cd build && ./beresta_tests --gtest_filter='BufferTest.*'
+cd build && ./berezta_tests --gtest_filter='BufferTest.*'
 ```
 
 Зависимости (utfcpp, googletest) скачиваются автоматически через CMake FetchContent. Vendored: `src/vendor/wcwidth.c`.
@@ -64,7 +64,7 @@ cd build && ./beresta_tests --gtest_filter='BufferTest.*'
 
 ## Conventions
 
-- Namespace: `beresta`.
+- Namespace: `berezta`.
 - Все позиции в Buffer — байтовые смещения в UTF-8, не codepoints.
 - Display-ширина (терминальные колонки) считается через `wcwidth` для double-width символов.
 - Тесты: Google Test, один файл `tests/<module>_test.cpp` на каждый модуль core.

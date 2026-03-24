@@ -4,7 +4,7 @@
 #include <cassert>
 #include <numeric>
 
-namespace beresta {
+namespace berezta {
 
 Range Range::merge(const Range& other) const {
     size_t new_from = std::min(from(), other.from());
@@ -118,4 +118,4 @@ void Selection::normalize() {
     primary_idx_ = std::min(new_primary, ranges_.size() - 1);
 }
 
-} // namespace beresta
+} // namespace berezta

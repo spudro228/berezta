@@ -4,7 +4,7 @@
 #include <string>
 #include <unistd.h>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 
@@ -432,4 +432,4 @@ std::optional<CommandEvent> read_key_event(InputMode mode) {
     return std::nullopt;
 }
 
-} // namespace beresta
+} // namespace berezta

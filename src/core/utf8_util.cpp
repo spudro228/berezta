@@ -4,7 +4,7 @@
 #include <utf8.h>
 #include <wcwidth.h>
 
-namespace beresta::ustr {
+namespace berezta::ustr {
 
 size_t codepoint_count(const std::string& s) {
     return utf8::distance(s.begin(), s.end());
@@ -65,4 +65,4 @@ bool is_valid(const std::string& s) {
     return utf8::is_valid(s.begin(), s.end());
 }
 
-} // namespace beresta::ustr
+} // namespace berezta::ustr

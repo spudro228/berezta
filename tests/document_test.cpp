@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace beresta;
+using namespace berezta;
 
 namespace {
 Document make_doc(const std::string& text) {

@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 static const std::string kHelpHint = " F1 Help  F2 Center ";
 
@@ -80,4 +80,4 @@ void render_status_bar(
     }
 }
 
-} // namespace beresta
+} // namespace berezta

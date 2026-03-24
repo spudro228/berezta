@@ -7,7 +7,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-namespace beresta::term {
+namespace berezta::term {
 
 namespace {
     struct termios original_termios;
@@ -204,4 +204,4 @@ bool kitty_keyboard_active() {
     return kitty_active;
 }
 
-} // namespace beresta::term
+} // namespace berezta::term

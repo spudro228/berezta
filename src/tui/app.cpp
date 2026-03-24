@@ -9,7 +9,7 @@
 #include <filesystem>
 #include <unistd.h>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 bool is_git_message_file(const std::string& path) {
@@ -403,7 +403,7 @@ void App::handle_prompt_key(int ch) {
         // Incremental search: jump to nearest match.
         if (!search_matches.empty()) {
             size_t cursor_pos = doc_.selection.primary().cursor();
-            size_t found = beresta::find_next(
+            size_t found = berezta::find_next(
                 doc_.buffer.to_string(), search_prompt_->input(), cursor_pos);
             if (found != std::string::npos) {
                 doc_.selection = Selection::single(found, found + search_prompt_->input().size());
@@ -481,14 +481,14 @@ void App::update_search_matches() {
     if (search_query.empty()) {
         search_matches.clear();
     } else {
-        search_matches = beresta::find_all(doc_.buffer.to_string(), search_query);
+        search_matches = berezta::find_all(doc_.buffer.to_string(), search_query);
     }
 }
 
 void App::find_next() {
     if (search_query.empty()) return;
     size_t start = doc_.selection.primary().to();
-    size_t found = beresta::find_next(doc_.buffer.to_string(), search_query, start);
+    size_t found = berezta::find_next(doc_.buffer.to_string(), search_query, start);
     if (found != std::string::npos) {
         doc_.selection = Selection::single(found, found + search_query.size());
         doc_.ensure_cursor_visible();
@@ -500,7 +500,7 @@ void App::find_next() {
 void App::find_prev() {
     if (search_query.empty()) return;
     size_t start = doc_.selection.primary().from();
-    size_t found = beresta::find_prev(doc_.buffer.to_string(), search_query, start);
+    size_t found = berezta::find_prev(doc_.buffer.to_string(), search_query, start);
     if (found != std::string::npos) {
         doc_.selection = Selection::single(found, found + search_query.size());
         doc_.ensure_cursor_visible();
@@ -825,4 +825,4 @@ void App::invalidate_pinned_highlights() {
     }
 }
 
-} // namespace beresta
+} // namespace berezta

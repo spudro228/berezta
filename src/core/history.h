@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// A single atomic edit operation that can be undone/redone.
 ///
 /// Stores full buffer snapshots for simplicity and correctness,
 /// especially with multi-cursor edits. This is O(file_size) per edit,
-/// which is perfectly fine for the small files beresta targets.
+/// which is perfectly fine for the small files berezta targets.
 struct Edit {
     std::string buffer_before;
     std::string buffer_after;
@@ -52,4 +52,4 @@ private:
     bool last_mergeable_ = false;
 };
 
-} // namespace beresta
+} // namespace berezta

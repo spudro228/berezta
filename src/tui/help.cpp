@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 
@@ -165,7 +165,7 @@ void render_help_screen(size_t terminal_width, size_t terminal_height) {
         term::move_cursor(start_col, row);
         term::color::fg_cyan(); term::write(kV); term::color::fg_default();
         term::color::fg_yellow();
-        const char* title = u8" beresta";
+        const char* title = u8" berezta";
         size_t tw = display_width(title);
         term::write(title);
         term::color::fg_default();
@@ -244,4 +244,4 @@ void render_help_screen(size_t terminal_width, size_t terminal_height) {
     draw_hborder(start_col, row, popup_cols, kBL, kH, kBR);
 }
 
-} // namespace beresta
+} // namespace berezta

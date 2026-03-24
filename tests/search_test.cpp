@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace beresta;
+using namespace berezta;
 
 TEST(SearchTest, FindAllBasic) {
     auto matches = find_all("foo bar foo baz foo", "foo");

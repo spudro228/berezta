@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// Token types for JSON syntax highlighting.
 enum class JsonTokenKind {
@@ -42,4 +42,4 @@ std::string format_json(const std::string& text);
 /// Check if a file path looks like a JSON file (by extension).
 bool is_json_file(const std::string& path);
 
-} // namespace beresta
+} // namespace berezta

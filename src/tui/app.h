@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// A text region pinned by the user for later copying.
 struct PinnedItem {
@@ -105,4 +105,4 @@ private:
     void invalidate_pinned_highlights();
 };
 
-} // namespace beresta
+} // namespace berezta

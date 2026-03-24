@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <vector>
 
-namespace beresta {
+namespace berezta {
 
 /// A single selection range defined by an anchor and a head (cursor).
 ///
@@ -116,4 +116,4 @@ private:
     void normalize();
 };
 
-} // namespace beresta
+} // namespace berezta

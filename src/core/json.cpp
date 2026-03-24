@@ -5,7 +5,7 @@
 #include <sstream>
 #include <stack>
 
-namespace beresta {
+namespace berezta {
 
 namespace {
 
@@ -409,4 +409,4 @@ bool is_json_file(const std::string& path) {
     return ext == ".json";
 }
 
-} // namespace beresta
+} // namespace berezta

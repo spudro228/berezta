@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace beresta {
+namespace berezta {
 
 /// Every action the editor can perform.
 ///
@@ -90,4 +90,4 @@ struct CommandEvent {
     std::string text;      // used for InsertText (UTF-8)
 };
 
-} // namespace beresta
+} // namespace berezta
