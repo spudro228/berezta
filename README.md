@@ -6,50 +6,42 @@
 
 - **UTF-8** — полная поддержка многобайтных символов, включая CJK (double-width)
 - **Кодировки** — автоопределение UTF-8, Latin-1 (ISO 8859-1), CP1251 (Windows-1251)
-- **Мультикурсор** — Ctrl+D (выделить слово/следующее вхождение), Alt+↑↓ (добавить курсор)
+- **Мультикурсор** — Ctrl+W (выделить слово/следующее вхождение), Alt+↑↓ (добавить курсор)
 - **Закреплённые выделения** — Ctrl+B закрепляет выделенный текст, Ctrl+L открывает панель для быстрого копирования
 - **Поиск и замена** — инкрементальный поиск (Ctrl+F), замена (Ctrl+H)
-- **Undo/Redo** — Ctrl+Z / Ctrl+Y
+- **Undo/Redo** — Ctrl+Z / Ctrl+Y с объединением последовательного ввода
+- **Удаление строк** — Ctrl+D удаляет строку или несколько выделенных строк
+- **Git integration** — подсветка commit messages, корректные exit-коды для git
 - **JSON** — подсветка синтаксиса, форматирование и валидация для .json файлов
-- **Kitty keyboard protocol** — горячие клавиши работают при любой раскладке клавиатуры (в поддерживающих терминалах)
+- **Kitty keyboard protocol** — горячие клавиши работают при любой раскладке клавиатуры
 - **Режим центрирования** — F2 для комфортного чтения
-
-## Сборка
-
-Требования: CMake ≥ 3.16, компилятор C++17.
-
-```bash
-cmake -B build
-cmake --build build
-```
-
-Зависимости (utfcpp, Google Test) скачиваются автоматически.
 
 ## Установка
 
-### Из релиза (macOS)
+### Из релиза
+
+Скачайте архив со [страницы релизов](https://github.com/spudro228/berezta/releases/latest).
+
+**macOS** (universal: Apple Silicon + Intel):
 
 ```bash
-# Скачать и распаковать
-tar xzf berezta-v0.2.0-macos-universal.tar.gz
-
-# Снять карантинный флаг Gatekeeper
-xattr -cr berezta
-
-# Установить в систему
+tar xzf berezta-v0.3.0-macos-universal.tar.gz
+xattr -cr berezta                        # снять блокировку Gatekeeper
 sudo cp berezta /usr/local/bin/
 ```
 
 > macOS блокирует неподписанные бинарники из интернета. Команда `xattr -cr` снимает карантинный атрибут. Альтернатива: Системные настройки → Конфиденциальность и безопасность → «Всё равно открыть».
 
-### Из релиза (Linux)
+**Linux** (x86_64):
 
 ```bash
-tar xzf berezta-v0.2.0-linux-x86_64.tar.gz
+tar xzf berezta-v0.3.0-linux-x86_64.tar.gz
 sudo cp berezta /usr/local/bin/
 ```
 
 ### Из исходников
+
+Требования: CMake ≥ 3.16, компилятор C++17. Зависимости скачиваются автоматически.
 
 ```bash
 git clone https://github.com/spudro228/berezta.git
@@ -59,30 +51,25 @@ cmake --build build
 sudo cp build/berezta /usr/local/bin/
 ```
 
-### Без sudo (в домашнюю директорию)
-
-Если нет прав на `/usr/local/bin`, можно установить в `~/.local/bin`:
+### Без sudo
 
 ```bash
 mkdir -p ~/.local/bin
 cp berezta ~/.local/bin/
 ```
 
-Добавьте в `~/.bashrc` (или `~/.zshrc` для macOS):
+Добавьте в `~/.bashrc` или `~/.zshrc`:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-Затем перезагрузите конфигурацию:
+Примените: `source ~/.bashrc` (или `source ~/.zshrc`).
+
+### Проверка
 
 ```bash
-source ~/.bashrc   # или source ~/.zshrc
-```
-
-После этого `berezta` доступна из любой директории:
-
-```bash
+berezta --version  # или просто
 berezta myfile.txt
 ```
 
@@ -131,13 +118,14 @@ cd build && ./berezta_tests --gtest_filter='BufferTest.*'
 | Клавиша | Действие |
 |---------|----------|
 | Shift+Стрелки | Расширить выделение |
+| Shift+Alt+←/→ | Выделение по словам |
 | Ctrl+A | Выделить всё |
 
 ### Мультикурсор
 
 | Клавиша | Действие |
 |---------|----------|
-| Ctrl+D | Выделить слово под курсором / следующее вхождение |
+| Ctrl+W | Выделить слово под курсором / следующее вхождение |
 | Alt+↑/↓ | Добавить курсор выше / ниже |
 | Escape | Сбросить до одного курсора |
 
@@ -148,6 +136,7 @@ cd build && ./berezta_tests --gtest_filter='BufferTest.*'
 | Ctrl+C | Копировать |
 | Ctrl+X | Вырезать |
 | Ctrl+V | Вставить |
+| Ctrl+D | Удалить строку (или выделенные строки) |
 | Ctrl+Z | Отмена |
 | Ctrl+Y | Возврат |
 
